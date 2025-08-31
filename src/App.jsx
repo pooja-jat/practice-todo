@@ -1,25 +1,32 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import "./App.css";
 import { useState } from "react";
 import CreateTodo from "./components/CreateTodo";
+import { deleteTodo } from "./redux/todoSlice";
 
 function App() {
+  const dispatch = useDispatch()
   const todos = useSelector((state) => state.todos);
+  const [updateTodo, setUpdateTodo] = useState(null);
 
   const [visible, setVisible] = useState(false);
-  const [updateTodo, setUpdateTodo] = useState(null);
 
   const handleClick = () => {
     setVisible(true);
   };
 
+  const handleRemove = (id) => {
+    dispatch(deleteTodo(id));
+  };
   const handleEdit = (todo) => {
     setVisible(true);
     setUpdateTodo(todo);
   };
   return (
     <>
-      {visible && <CreateTodo setVisible={setVisible} updateTodo={updateTodo} />}
+      {visible && (
+        <CreateTodo setVisible={setVisible} updateTodo={updateTodo} />
+      )}
 
       <div className="min-h-screen bg-gren-50 flex flex-col items-center justify-center">
         <h1 className="font-bold text-2xl my-4">All Todos Here</h1>
@@ -74,7 +81,10 @@ function App() {
                       >
                         Edit
                       </button>
-                      <button className="px-2 py-1 bg-red-400 rounded-sm font-semibold text-white cursor-pointer">
+                      <button
+                        onClick={() => handleRemove(todo.id)}
+                        className="px-2 py-1 bg-red-400 rounded-sm font-semibold text-white cursor-pointer"
+                      >
                         Delete
                       </button>
                     </div>

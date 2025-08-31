@@ -13,16 +13,22 @@ const CreateTodo = ({ setVisible, updateTodo }) => {
 
   const handleSave = (e) => {
     e.preventDefault();
-
     if (updateTodo) {
-      form.id = updateTodo.id;
+      form.id = updateTodo.id
       dispatch(editTodo(form));
     } else {
       dispatch(addTodo(form));
     }
-
     setVisible(false);
   };
+  //   if (updateTodo) {
+  //     form.id = updateTodo.id;
+  //     dispatch(editTodo(form));
+  //   } else {
+  //     dispatch(addTodo(form));
+  //   }
+
+  //   setVisible(false);
 
   const handleCancle = () => {
     setVisible(false);
