@@ -8,17 +8,22 @@ const todoSlice = createSlice({
         id: crypto.randomUUID(),
         title: "Aman 2",
         assignedto: "amanyo",
-        status: "done",
+        status: "Done",
       },
       {
         id: crypto.randomUUID(),
         title: "Aman 4",
         assignedto: "amanyooooo",
-        status: "inprogress",
+        status: "Inprogress",
       },
     ],
   },
-  reducer: {},
+  reducers: {
+    addTodo: (state, action) => {
+      action.payload.id = crypto.randomUUID();
+      state.todos = [...state.todos, action.payload];
+    },
+  },
 });
-
+export const { addTodo } = todoSlice.actions;
 export default todoSlice.reducer;

@@ -1,38 +1,34 @@
 import { useSelector } from "react-redux";
 import "./App.css";
+import { useState } from "react";
+import CreateTodo from "./components/CreateTodo";
 
 function App() {
   const todos = useSelector((state) => state.todos);
 
+  const [visible, setVisible] = useState(false);
+
+  const handleClick = () => {
+    setVisible(true);
+  };
+
   return (
     <>
-      <div className="min-h-screen bg-green-50 flex flex-col items-center justify-center">
-        {/* <form className=" w-1/3 flex flex-col bg-green-200 p-8 rounded-md gap-4">
-          <input
-            className="border border-green-800 p-2 rounded-md outline-none"
-            placeholder="Title"
-          />
-          <input
-            className="border border-green-800 p-2 rounded-md outline-none"
-       
-            placeholder="Assigned To"
-          />
-          <select className="border border-green-800 p-2 rounded-md outline-none">
-            Status
-            <option selected>Choose a status</option>
-            <option>Pending</option>
-            <option>Inprogress</option>
-            <option>Done</option>
-          </select>
-        </form> */}
+      {visible && <CreateTodo setVisible={setVisible} />}
+
+      <div className="min-h-screen bg-gren-50 flex flex-col items-center justify-center">
         <h1 className="font-bold text-2xl my-4">All Todos Here</h1>
+
         <div className="w-2/3 flex items-start">
-          <button className="px-2 py-1 bg-green-400 rounded-sm font-semibold text-white cursor-pointer my-2">
+          <button
+            onClick={handleClick}
+            className="px-2 py-1 bg-green-400 rounded-sm font-semibold text-white cursor-pointer my-2"
+          >
             + ADD NEW
           </button>
         </div>
 
-        <table className="w-2/3 text-center table-auto min-w-max">
+        <table className="w-2/3 text-center table-auto">
           <thead>
             <tr>
               <th className="p-4 border border-green-500">S no.</th>
@@ -44,6 +40,16 @@ function App() {
           </thead>
           <tbody>
             {todos.map((todo, index) => {
+              let statusColor = "";
+              if (todo.status === "Pending") {
+                statusColor = "bg-gray-200 text-lg text-gray-500";
+              }
+              if (todo.status === "Inprogress") {
+                statusColor = "bg-yellow-200 text-lg text-yellow-800";
+              }
+              if (todo.status === "Done") {
+                statusColor = "bg-green-200 text-lg text-green-700";
+              } ``
               return (
                 <tr>
                   <td className="p-4 border border-green-500">{index + 1}</td>
@@ -51,7 +57,9 @@ function App() {
                   <td className="p-4 border border-green-500">
                     {todo.assignedto}
                   </td>
-                  <td className="p-4 border border-green-500">{todo.status}</td>
+                  <td className={`p-4 border border-green-500 ${statusColor}`}>
+                    {todo.status}
+                  </td>
                   <td className="p-4 border border-green-500  flex  items-center justify-center gap-2">
                     <button className="px-2 py-1 bg-yellow-400 rounded-sm font-semibold text-white cursor-pointer">
                       Edit
