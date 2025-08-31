@@ -23,7 +23,12 @@ const todoSlice = createSlice({
       action.payload.id = crypto.randomUUID();
       state.todos = [...state.todos, action.payload];
     },
+    editTodo: (state, action) => {
+      state.todos = state.todos.map((todo) =>
+        todo.id == action.payload.id ? action.payload : todo
+      );
+    },
   },
 });
-export const { addTodo } = todoSlice.actions;
+export const { addTodo, editTodo } = todoSlice.actions;
 export default todoSlice.reducer;

@@ -1,18 +1,26 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { addTodo } from "../redux/todoSlice";
+import { addTodo, editTodo } from "../redux/todoSlice";
 
-const CreateTodo = ({ setVisible }) => {
+const CreateTodo = ({ setVisible, updateTodo }) => {
   const dispatch = useDispatch();
+
   const [form, setForm] = useState({
-    title: "",
-    assignedto: "",
-    status: "",
+    title: updateTodo ? updateTodo.title : "",
+    assignedto: updateTodo ? updateTodo.assignedto : "",
+    status: updateTodo ? updateTodo.status : "",
   });
 
   const handleSave = (e) => {
     e.preventDefault();
-    dispatch(addTodo(form));
+
+    if (updateTodo) {
+      form.id = updateTodo.id;
+      dispatch(editTodo(form));
+    } else {
+      dispatch(addTodo(form));
+    }
+
     setVisible(false);
   };
 
@@ -22,18 +30,21 @@ const CreateTodo = ({ setVisible }) => {
 
   return (
     <div class="absolute flex items-center justify-center w-full h-screen">
-      <form class="relative p-6 min-w-1/2 min-h-[200px] bg-white rounded-lg shadow-sm flex flex-col gap-4">
+      <form class="relative p-6 min-w-1/2 min-h-[200px] bg-green-50 rounded-lg shadow-sm flex flex-col gap-4">
         <input
+          value={form.title}
           onChange={(e) => setForm({ ...form, title: e.target.value })}
           className="border border-green-800 p-2 rounded-md outline-none"
           placeholder="Title"
         />
         <input
+          value={form.assignedto}
           onChange={(e) => setForm({ ...form, assignedto: e.target.value })}
           className="border border-green-800 p-2 rounded-md outline-none"
           placeholder="Assigned To"
         />
         <select
+          value={form.status}
           onChange={(e) => setForm({ ...form, status: e.target.value })}
           className="border border-green-800 p-2 rounded-md outline-none"
         >
@@ -48,7 +59,7 @@ const CreateTodo = ({ setVisible }) => {
             onClick={handleSave}
             className="w-full  px-2 py-1 bg-yellow-400 rounded-sm font-semibold text-white cursor-pointer"
           >
-            Save
+            {updateTodo ? "Update" : "Save"}
           </button>
           <button
             onClick={handleCancle}
