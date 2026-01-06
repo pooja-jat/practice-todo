@@ -1,31 +1,37 @@
-import { useDispatch, useSelector } from "react-redux";
 import "./App.css";
 import { useState } from "react";
 import CreateTodo from "./components/CreateTodo";
-import { deleteTodo } from "./redux/todoSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { removeTodo } from "./redux/todoSlice";
 
 function App() {
-  const dispatch = useDispatch()
   const todos = useSelector((state) => state.todos);
-  const [updateTodo, setUpdateTodo] = useState(null);
+  const dispatch = useDispatch();
 
   const [visible, setVisible] = useState(false);
+  const [updateTodo, setUpdateTodo] = useState(null);
 
   const handleClick = () => {
     setVisible(true);
   };
 
-  const handleRemove = (id) => {
-    dispatch(deleteTodo(id));
-  };
   const handleEdit = (todo) => {
     setVisible(true);
     setUpdateTodo(todo);
   };
+
+  const handleRemove = (id) => {
+    dispatch(removeTodo(id));
+  };
+
   return (
     <>
       {visible && (
-        <CreateTodo setVisible={setVisible} updateTodo={updateTodo} />
+        <CreateTodo
+          setVisible={setVisible}
+          updateTodo={updateTodo}
+          setUpdateTodo={setUpdateTodo}
+        />
       )}
 
       <div className="min-h-screen bg-gren-50 flex flex-col items-center justify-center">
@@ -64,11 +70,11 @@ function App() {
               }
               ``;
               return (
-                <tr>
+                <tr key={todo.id}>
                   <td className="p-4 border border-green-500">{index + 1}</td>
                   <td className="p-4 border border-green-500">{todo.title}</td>
                   <td className="p-4 border border-green-500">
-                    {todo.assignedto}
+                    {todo.assignedTo}
                   </td>
                   <td className={`p-4 border border-green-500 ${statusColor}`}>
                     {todo.status}
